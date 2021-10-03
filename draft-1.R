@@ -33,3 +33,18 @@ freq <- sort(tab, decreasing = T) ## sort the times each word occurs in decreasi
 m <- 1000 ## the number of words that will be used to train the model
 threshold <- freq[m] ## search for the threshold number of the m most common words, but may require further adjustment according to the result of next step
 b <- uni_words[which(tab >= threshold)] ## select the m most common words to create vector b
+
+mat_word <- match(splitted_words, b) ## a vector giving which element of  vector, b, each element of the full text vector corresponds to
+prior <- mat_word[1:(length(mat_word) - 1)] ## the first column, which is the index for common words
+following <- mat_word[2:length(mat_word)] ## the second column, which gives the following words
+pair_words <- cbind(prior, following) ## a matrix where each row is a pair of common words
+pair_words <- pair_words[- which(is.na(rowSums(pair_words))),] ## delete rows having NA
+A <- matrix(0, length(b), length(b)) ## a matrix where A[i,j] means the jth word in the common words follows the ith word
+for (k in 1:dim(pair_words)[1]) {
+  i = pair_words[k, 1]
+  j = pair_words[k, 2]
+  A[i,j] = A[i,j] + 1
+} ## caculate how many times the ith common word is followed by the jth common word
+for (k in 1:length(b)) {
+  A[k, ] <- A[k, ]/sum(A[k, ])
+} ## standardize each row of A, so that A[i,j] can be interpreted as probablity that b[j] will follow b[i]
