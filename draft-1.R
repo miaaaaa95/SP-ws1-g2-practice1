@@ -61,10 +61,3 @@ for (i in 2:num_words) {
 }
 
 cat(sentence) ## print out the text
-
-
-
-
-
-
-
