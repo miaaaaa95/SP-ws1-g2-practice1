@@ -1,12 +1,13 @@
+##name
 getwd()
-setwd("~/SP-ws1-g2-practice1")
+setwd()
 a <- scan("1581-0.txt", what = "character", skip = 156)
 n <- length(a)
 a <- a[- ((n - 2909):n)] ## strip license
 
 
 split_punct <- function(test){
-  punc <- c(",", ":", ".", ";", "!", "?")
+  punc <- c(",", ".", ";", "!", ":","?")
   for (i in 1:length(punc)) {
     p <- punc[i] 
     ipunc <- grep(p, test, fixed = T) ## search for words containing this mark
@@ -23,11 +24,9 @@ split_punct <- function(test){
   return(splitted)
 }
 
-##split_punct(as.character(c("A....B", "1:1.", "A??,an!"))) test example
-##split_punct(a[1:100])
 
-splitted_words <- split_punct(a)
-splitted_words <- tolower(splitted_words) ## replaced capital letters
+splitted_words_origin <- split_punct(a)
+splitted_words <- tolower(splitted_words_origin) ## replaced capital letters
 uni_words <- unique(splitted_words) ## a vector of unique words
 uid <- match(splitted_words, uni_words) ## vector of indicies indicating which element in the unique word vector each element in the bible text corresponds to
 tab <- tabulate(uid) ## count up how many times each unique word occurs in the text
@@ -62,4 +61,29 @@ for (i in 2:num_words) {
   prior_word <- sentence[i] ## update the prior word
 }
 
-cat(sentence) ## print out the text
+
+cat(sentence) ## print out the text without capital letters
+
+##Uppercase conversion
+splitted_words_capital <- 
+  splitted_words_origin[grep("^[A-Z]", splitted_words_origin)]##find all words start with capital letter
+uni_capital_words <- unique(tolower(splitted_words_capital))
+uid_capital <- match(tolower(splitted_words_capital), uni_capital_words)
+tab_capital <- tabulate(uid_capital)
+tab_capital_sum <- tabulate(match(splitted_words, uni_capital_words))
+prob_capital <- tab_capital / tab_capital_sum ## Probability of a word being capitalised in the text
+
+firstupper <- function(x) {
+  substr(x, 1, 1) <- toupper(substr(x, 1, 1))
+  return(x)
+} ##set a function to capitalize the first letter
+sentence_capital <- sentence
+for (i in seq_len(length(sentence))) {
+  if (length(which(sentence[i] == uni_capital_words) == 0)) {
+    prob_i <- prob_capital[which(sentence[i] == uni_capital_words)]
+    sentence_capital[i] <- 
+      sample(c(sentence[i], firstupper(sentence[i])), size = 1, prob = c((1-prob_i),prob_i))
+  }
+}
+cat(sentence_capital)
+cat(sentence)
