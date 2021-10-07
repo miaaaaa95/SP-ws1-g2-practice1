@@ -6,7 +6,7 @@ n <- length(a)
 a <- a[- ((n - 2909):n)] ## strip license
 
 ## set up a function to separate words from symbols
-split_punct <- function(test) {
+split_punct <- function(test){
   punc <- c(",", ".", ";", "!", ":","?") ##store the punctuation marks as a vector
   for (i in 1:length(punc)) {
     p <- punc[i] 
