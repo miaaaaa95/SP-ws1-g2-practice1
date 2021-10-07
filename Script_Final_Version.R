@@ -13,7 +13,7 @@ split_punct <- function(test) {
     ipunc <- grep(p, test, fixed = T) ## search for words containing this mark
     npunc <- length(ipunc) ## number of words containing this punctuation
     if (npunc == 0) next ## if all words don't contain this punctuation, skip to next loop
-    spunc <- rep("", length(test) + npunc) ## create a new vectore to store the splited words
+    spunc <- rep("", length(test) + npunc) ## create a new vector to store the splited words
     sii <- ipunc + 1:npunc ## vector to store the position of this punctuations
     spunc[sii] <- p ## insert the punctuations
     spunc[sii-1] <- gsub(p, "", test[ipunc], fixed = TRUE) ## insert words the punctuations attacthed to
