@@ -1,7 +1,7 @@
 ##Authors: Huanyu Su(s2171849), Mia Wu(s2025818), Peiran Zhang(s2184444)
 getwd()
 setwd("~/SP-ws1-g2-practice1/")
-a <- scan("/Users/axxsy/Desktop/5M/StatisticalProgramming/assessment/SP-ws1-g2-practice1/1581-0.txt", what = "character", skip = 156) ## Converting text to charactors
+a <- scan("1581-0.txt", what = "character", skip = 156) ## converting the bible text to characters
 n <- length(a)
 a <- a[- ((n - 2909):n)] ## strip license
 
