@@ -1,13 +1,13 @@
 ##name
 getwd()
-setwd()
-a <- scan("1581-0.txt", what = "character", skip = 156)
+setwd("~/SP-ws1-g2-practice1/")
+a <- scan("1581-0.txt", what = "character", skip = 156) ## Converting text to charactors
 n <- length(a)
 a <- a[- ((n - 2909):n)] ## strip license
 
-
+## set up a function to separate words from symbols
 split_punct <- function(test){
-  punc <- c(",", ".", ";", "!", ":","?")
+  punc <- c(",", ".", ";", "!", ":","?") ##store the punctuation marks as a vector
   for (i in 1:length(punc)) {
     p <- punc[i] 
     ipunc <- grep(p, test, fixed = T) ## search for words containing this mark
@@ -66,24 +66,28 @@ cat(sentence) ## print out the text without capital letters
 
 ##Uppercase conversion
 splitted_words_capital <- 
-  splitted_words_origin[grep("^[A-Z]", splitted_words_origin)]##find all words start with capital letter
-uni_capital_words <- unique(tolower(splitted_words_capital))
+  splitted_words_origin[grep("^[A-Z]", splitted_words_origin)] ##find all words start with capital letter
+uni_capital_words <- unique(tolower(splitted_words_capital)) ##Lowercase then use a vector to store all the unique words
+## vector of indicies indicating which element in the unique capital word vector each element in the bible text corresponds to
 uid_capital <- match(tolower(splitted_words_capital), uni_capital_words)
-tab_capital <- tabulate(uid_capital)
+tab_capital <- tabulate(uid_capital)## count the number of occurrences of each capital words
+## caculate  probability of a word being capitalised in the text
 tab_capital_sum <- tabulate(match(splitted_words, uni_capital_words))
-prob_capital <- tab_capital / tab_capital_sum ## Probability of a word being capitalised in the text
+prob_capital <- tab_capital / tab_capital_sum 
 
+##set a function to capitalize the first letter
 firstupper <- function(x) {
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
   return(x)
-} ##set a function to capitalize the first letter
-sentence_capital <- sentence
-for (i in seq_len(length(sentence))) {
-  if (length(which(sentence[i] == uni_capital_words) == 0)) {
-    prob_i <- prob_capital[which(sentence[i] == uni_capital_words)]
-    sentence_capital[i] <- 
-      sample(c(sentence[i], firstupper(sentence[i])), size = 1, prob = c((1-prob_i),prob_i))
-  }
 }
-cat(sentence_capital)
+
+sentence_capital <- sentence 
+for (i in seq_len(length(sentence))) {
+  if (length(which(sentence[i] == uni_capital_words) == 0)) ##Exclude words that are never capitalised in the text
+    {
+    prob_i <- prob_capital[which(sentence[i] == uni_capital_words)]
+    sentence_capital[i] <- sample(c(sentence[i], firstupper(sentence[i])), size = 1, prob = c((1-prob_i),prob_i))
+  }## Replace words in the original sentence according to the probability of capitalising the first letter of the word
+}
+cat(sentence_capital) ## print the modified sentence
 cat(sentence)

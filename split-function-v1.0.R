@@ -9,7 +9,7 @@ a <- a[-((n-2909):n)]
 split_punct <- function(test){
   punc <- c(",", ":", ".", ";", "!", "?")
   for (i in 1:length(punc)) {
-    p <- punc[i] 
+    p <- punc[i]
     ipunc <- grep(p, test, fixed = T) ## search for words containing this mark
     npunc <- length(ipunc) ## number of words containing this punctuation
     if (npunc == 0) next ## if all words don't contain this punctuation, skip to next loop
