@@ -7,16 +7,16 @@ a <- a[- ((n - 2909):n)] ## strip license
 
 ## set up a function to separate words from symbols
 split_punct <- function(test) {
-  punc <- c(",", ".", ";", "!", ":","?") ##store the punctuation marks as a vector
+  punc <- c(",", ".", ";", "!", ":","?") ##store punctuation marks as a vector
   for (i in 1:length(punc)) {
     p <- punc[i] 
-    ipunc <- grep(p, test, fixed = T) ## search for words containing this mark
+    ipunc <- grep(p, test, fixed = T) ## search for words containing this punctuation
     npunc <- length(ipunc) ## number of words containing this punctuation
     if (npunc == 0) next ## if all words don't contain this punctuation, skip to next loop
-    spunc <- rep("", length(test) + npunc) ## create a new vectore to store the splited words
-    sii <- ipunc + 1:npunc ## vector to store the position of this punctuations
-    spunc[sii] <- p ## insert the punctuations
-    spunc[sii-1] <- gsub(p, "", test[ipunc], fixed = TRUE) ## insert words the punctuations attacthed to
+    spunc <- rep("", length(test) + npunc) ## create a new vector to store all split words and punctuation
+    sii <- ipunc + 1:npunc ## create a vector to store the position of punctuation
+    spunc[sii] <- p ## insert all punctuation
+    spunc[sii-1] <- gsub(p, "", test[ipunc], fixed = TRUE) ## insert words the punctuation attacthed to
     spunc[-c(sii, sii-1)] <- test[-ipunc] ## insert other words
     test <- spunc ## update words vector
   }
@@ -25,9 +25,9 @@ split_punct <- function(test) {
 }
 
 
-splitted_words_origin <- split_punct(a)
-splitted_words <- tolower(splitted_words_origin) ## replaced capital letters
-uni_words <- unique(splitted_words) ## a vector of unique words
+splitted_words_origin <- split_punct(a) ## use the above function to separate words from symbols
+splitted_words <- tolower(splitted_words_origin) ## replaced Capital letters
+uni_words <- unique(splitted_words) ## a vector of unique words with duplicate elements/rows removed
 uid <- match(splitted_words, uni_words) ## vector of indicies indicating which element in the unique word vector each element in the bible text corresponds to
 tab <- tabulate(uid) ## count up how many times each unique word occurs in the text
 freq <- sort(tab, decreasing = T) ## sort the times each word occurs in decreasing order
