@@ -93,3 +93,4 @@ for (i in seq_len(length(sentence))) {
 }
 cat(sentence_capital) ## print the modified sentence
 cat(sentence)
+
